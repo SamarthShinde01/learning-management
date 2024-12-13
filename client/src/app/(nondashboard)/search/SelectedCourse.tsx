@@ -1,3 +1,4 @@
+import AccordionSections from "@/components/AccordionSections";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 
@@ -22,7 +23,8 @@ const SelectedCourse = ({ course, handleEnrollNow }: SelectedCourseProps) => {
 					<h4 className="text-white-50/90 font-semibold mb-2">
 						Course Content
 					</h4>
-					{/* ACCORDION SECTION */}
+
+					<AccordionSections sections={course?.sections} />
 				</div>
 
 				<div className="flex justify-between items-center mt-5">
