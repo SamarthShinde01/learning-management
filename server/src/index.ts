@@ -6,6 +6,9 @@ import helmet from "helmet";
 import morgan from "morgan";
 import * as dynamoose from "dynamoose";
 
+/* ROUTES IMPORTS */
+import courseRoutes from "./routes/courseRoutes";
+
 const isProduction = process.env.NODE_ENV === "production";
 
 if (!isProduction) {
@@ -24,6 +27,8 @@ app.use(cors());
 app.get("/", (req, res) => {
 	res.send("Hello World");
 });
+
+app.use("/courses", courseRoutes);
 
 const PORT = process.env.PORT || 3000;
 
