@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import { UserProfile } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 
-const UserProfilePage = () => {
+const TeacherProfilePage = () => {
 	return (
 		<>
 			<Header title="Profile" subtitle="View your profile" />
@@ -25,4 +25,4 @@ const UserProfilePage = () => {
 	);
 };
 
-export default UserProfilePage;
+export default TeacherProfilePage;
