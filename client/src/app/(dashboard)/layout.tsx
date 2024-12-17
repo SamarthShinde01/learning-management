@@ -1,5 +1,6 @@
 "use client";
 import AppSidebar from "@/components/AppSidebar";
+import DashboardNavbar from "@/components/DashboardNavbar";
 import Loading from "@/components/Loading";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
@@ -33,6 +34,7 @@ export default function DashboardLayout({
 						)}
 						style={{ height: "100vh" }}
 					>
+						<DashboardNavbar isCoursePage={false} />
 						<main className="px-8 py-4">{children}</main>
 					</div>
 				</div>
