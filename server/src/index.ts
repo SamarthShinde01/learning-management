@@ -14,6 +14,7 @@ import {
 /* ROUTES IMPORTS */
 import courseRoutes from "./routes/courseRoutes";
 import userClerkRoutes from "./routes/userClerkRoutes";
+import transactionRoutes from "./routes/transactionRoutes";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -41,6 +42,7 @@ app.get("/", (req, res) => {
 
 app.use("/courses", courseRoutes);
 app.use("/users/clerk", requireAuth(), userClerkRoutes);
+app.use("/transaction", requireAuth(), transactionRoutes);
 
 const PORT = process.env.PORT || 3000;
 
