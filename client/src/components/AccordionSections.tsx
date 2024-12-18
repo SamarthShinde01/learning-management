@@ -9,7 +9,7 @@ import { FileText } from "lucide-react";
 const AccordionSections = ({ sections }: AccordionSectionsProps) => {
 	return (
 		<Accordion type="multiple" className="w-full">
-			{sections.map((section) => (
+			{sections?.map((section) => (
 				<AccordionItem
 					key={section.sectionId}
 					value={section.sectionTitle}
