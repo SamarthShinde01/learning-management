@@ -82,9 +82,17 @@ export const api = createApi({
 			{ amount: number }
 		>({
 			query: ({ amount }) => ({
-				url: `/transactions/stripe/payment-intent`,
+				url: `/transaction/stripe/payment-intent`,
 				method: "POST",
 				body: { amount },
+			}),
+		}),
+
+		createTransaction: build.mutation<Transaction, Partial<Transaction>>({
+			query: (transaction) => ({
+				url: "transaction",
+				method: "POST",
+				body: transaction,
 			}),
 		}),
 	}),
@@ -95,4 +103,5 @@ export const {
 	useGetCoursesQuery,
 	useGetCourseQuery,
 	useCreateStripePaymentIntentMutation,
+	useCreateTransactionMutation,
 } = api;
