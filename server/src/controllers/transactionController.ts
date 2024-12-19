@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import "dotenv/config()";
+import "dotenv/config";
 import { Request, Response } from "express";
 
 if (!process.env.STRIPE_SECRET_KEY) {

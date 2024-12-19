@@ -82,7 +82,7 @@ export const api = createApi({
 			{ amount: number }
 		>({
 			query: ({ amount }) => ({
-				url: `/transaction/stripe/payment-intent`,
+				url: `/transactions/stripe/payment-intent`,
 				method: "POST",
 				body: { amount },
 			}),
