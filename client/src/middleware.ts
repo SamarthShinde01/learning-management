@@ -11,15 +11,15 @@ export default clerkMiddleware(async (auth, req) => {
 			?.userType || "student";
 
 	if (isStudentRoute(req)) {
-		if (userRole !== "student") {
-			const url = new URL("/teacher/courses", req.url);
+		if (userRole === "student") {
+			const url = new URL("/user/courses", req.url);
 			return NextResponse.redirect(url);
 		}
 	}
 
 	if (isTeacherRoute(req)) {
-		if (userRole !== "teacher") {
-			const url = new URL("/user/courses", req.url);
+		if (userRole === "teacher") {
+			const url = new URL("/teacher/courses", req.url);
 			return NextResponse.redirect(url);
 		}
 	}

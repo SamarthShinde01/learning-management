@@ -39,17 +39,18 @@ const AppSidebar = () => {
 			{ icon: Settings, label: "Settings", href: "/user/settings" },
 		],
 		teacher: [
-			{ icon: BookOpen, label: "Courses", href: "/user/courses" },
-			{ icon: DollarSign, label: "Billing", href: "/user/billing" },
-			{ icon: User, label: "Profile", href: "/user/profile" },
-			{ icon: Settings, label: "Settings", href: "/user/settings" },
+			{ icon: BookOpen, label: "Courses", href: "/teacher/courses" },
+			{ icon: DollarSign, label: "Billing", href: "/teacher/billing" },
+			{ icon: User, label: "Profile", href: "/teacher/profile" },
+			{ icon: Settings, label: "Settings", href: "/teacher/settings" },
 		],
 	};
 
 	if (!isLoaded) return <Loading />;
 	if (!user) return <div>User not found</div>;
 
-	const userType = user?.publicMetadata?.userType as "student" | "teacher";
+	const userType =
+		(user.publicMetadata.userType as "student" | "teacher") || "student";
 	const currentNavLinks = navLinks[userType];
 
 	return (
