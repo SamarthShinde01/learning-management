@@ -33,12 +33,15 @@ export const getCourse = async (req: Request, res: Response) => {
 	}
 };
 
-export const createCourse = async (req: Request, res: Response) => {
-	const { teacherId, teacherName } = req.body;
-
+export const createCourse = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	try {
+		const { teacherId, teacherName } = req.body;
+
 		if (!teacherId || !teacherName) {
-			res.status(400).json({ message: "Teacher Id and name is required" });
+			res.status(400).json({ message: "Teacher Id and name are required" });
 			return;
 		}
 
@@ -60,25 +63,29 @@ export const createCourse = async (req: Request, res: Response) => {
 
 		res.json({ message: "Course created successfully", data: newCourse });
 	} catch (error) {
-		res.json({ message: "Error creating course", error });
+		res.status(500).json({ message: "Error creating course", error });
 	}
 };
 
-export const updateCourse = async (req: Request, res: Response) => {
+export const updateCourse = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	const { courseId } = req.params;
 	const updateData = { ...req.body };
 	const { userId } = getAuth(req);
 
 	try {
 		const course = await Course.get(courseId);
-
 		if (!course) {
 			res.status(404).json({ message: "Course not found" });
 			return;
 		}
 
 		if (course.teacherId !== userId) {
-			res.status(403).json({ message: "Not authorized to update this course" });
+			res
+				.status(403)
+				.json({ message: "Not authorized to update this course " });
 			return;
 		}
 
@@ -89,7 +96,6 @@ export const updateCourse = async (req: Request, res: Response) => {
 					message: "Invalid price format",
 					error: "Price must be a valid number",
 				});
-
 				return;
 			}
 			updateData.price = price * 100;
@@ -116,31 +122,35 @@ export const updateCourse = async (req: Request, res: Response) => {
 
 		res.json({ message: "Course updated successfully", data: course });
 	} catch (error) {
-		res.status(403).json({ message: "Error updating course", error });
+		res.status(500).json({ message: "Error updating course", error });
 	}
 };
 
-export const deleteCourse = async (req: Request, res: Response) => {
+export const deleteCourse = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	const { courseId } = req.params;
 	const { userId } = getAuth(req);
 
 	try {
 		const course = await Course.get(courseId);
-
 		if (!course) {
 			res.status(404).json({ message: "Course not found" });
 			return;
 		}
 
 		if (course.teacherId !== userId) {
-			res.status(403).json({ message: "Not authorized to delete this course" });
+			res
+				.status(403)
+				.json({ message: "Not authorized to delete this course " });
 			return;
 		}
 
 		await Course.delete(courseId);
 
-		res.json({ message: "Course deleted successfully" });
+		res.json({ message: "Course deleted successfully", data: course });
 	} catch (error) {
-		res.status(403).json({ message: "Error deleting course", error });
+		res.status(500).json({ message: "Error deleting course", error });
 	}
 };
