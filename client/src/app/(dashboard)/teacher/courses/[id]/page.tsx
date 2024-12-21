@@ -5,23 +5,34 @@ import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { courseSchema } from "@/lib/schemas";
-import { centsToDollars, createCourseFormData } from "@/lib/utils";
+import {
+	centsToDollars,
+	createCourseFormData,
+	uploadAllVideos,
+} from "@/lib/utils";
 import { openSectionModal, setSections } from "@/state";
-import { useGetCourseQuery, useUpdateCourseMutation } from "@/state/api";
+import {
+	useGetCourseQuery,
+	useUpdateCourseMutation,
+	useGetUploadVideoUrlMutation,
+} from "@/state/api";
 import { useAppDispatch, useAppSelector } from "@/state/redux";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import DroppableComponent from "./Droppable";
+import ChapterModal from "./ChapterModal";
+import SectionModal from "./SectionModal";
 
 const CourseEditor = () => {
 	const router = useRouter();
 	const params = useParams();
 	const id = params.id as string;
-	const { data: course, isLoading, isError } = useGetCourseQuery(id);
+	const { data: course, isLoading, refetch } = useGetCourseQuery(id);
 	const [updateCourse] = useUpdateCourseMutation();
+	const [getUploadVideoUrl] = useGetUploadVideoUrlMutation();
 
 	const dispatch = useAppDispatch();
 	const { sections } = useAppSelector((state) => state.global.courseEditor);
@@ -46,23 +57,28 @@ const CourseEditor = () => {
 				coursePrice: centsToDollars(course.price),
 				courseStatus: course.status === "Published",
 			});
-
 			dispatch(setSections(course.sections || []));
 		}
-	}, [course, methods]);
+	}, [course, methods]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const onSubmit = async (data: CourseFormData) => {
 		try {
-			const formData = createCourseFormData(data, sections);
+			const updatedSections = await uploadAllVideos(
+				sections,
+				id,
+				getUploadVideoUrl
+			);
 
-			const updatedCourse = await updateCourse({
+			const formData = createCourseFormData(data, updatedSections);
+
+			await updateCourse({
 				courseId: id,
 				formData,
 			}).unwrap();
 
-			// refetch();
+			refetch();
 		} catch (error) {
-			console.error("Failed to update course: ", error);
+			console.error("Failed to update course:", error);
 		}
 	};
 
@@ -70,8 +86,8 @@ const CourseEditor = () => {
 		<div>
 			<div className="flex items-center gap-5 mb-5">
 				<button
-					className="flex items-center border border-customgreys-dirtyGrey rounded-lg p-2 gap-2"
-					onClick={() => router.push("/teacher/courses")}
+					className="flex items-center border border-customgreys-dirtyGrey rounded-lg p-2 gap-2 cursor-pointer hover:bg-customgreys-dirtyGrey hover:text-white-100 text-customgreys-dirtyGrey"
+					onClick={() => router.push("/teacher/courses", { scroll: false })}
 				>
 					<ArrowLeft className="w-4 h-4" />
 					<span>Back to Courses</span>
@@ -126,7 +142,6 @@ const CourseEditor = () => {
 									label="Course Description"
 									type="textarea"
 									placeholder="Write course description here"
-									className="border-none"
 									initialValue={course?.description}
 								/>
 
@@ -190,6 +205,9 @@ const CourseEditor = () => {
 					</div>
 				</form>
 			</Form>
+
+			<ChapterModal />
+			<SectionModal />
 		</div>
 	);
 };

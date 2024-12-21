@@ -51,7 +51,6 @@ export const globalSlice = createSlice({
 			state.courseEditor.isSectionModalOpen = true;
 			state.courseEditor.selectedSectionIndex = action.payload.sectionIndex;
 		},
-
 		closeSectionModal: (state) => {
 			state.courseEditor.isSectionModalOpen = false;
 			state.courseEditor.selectedSectionIndex = null;
@@ -60,7 +59,6 @@ export const globalSlice = createSlice({
 		addSection: (state, action: PayloadAction<Section>) => {
 			state.courseEditor.sections.push(action.payload);
 		},
-
 		editSection: (
 			state,
 			action: PayloadAction<{ index: number; section: Section }>
@@ -68,7 +66,6 @@ export const globalSlice = createSlice({
 			state.courseEditor.sections[action.payload.index] =
 				action.payload.section;
 		},
-
 		deleteSection: (state, action: PayloadAction<number>) => {
 			state.courseEditor.sections.splice(action.payload, 1);
 		},
@@ -81,7 +78,6 @@ export const globalSlice = createSlice({
 				action.payload.chapter
 			);
 		},
-
 		editChapter: (
 			state,
 			action: PayloadAction<{
@@ -94,7 +90,6 @@ export const globalSlice = createSlice({
 				action.payload.chapterIndex
 			] = action.payload.chapter;
 		},
-
 		deleteChapter: (
 			state,
 			action: PayloadAction<{ sectionIndex: number; chapterIndex: number }>
@@ -120,4 +115,5 @@ export const {
 	editChapter,
 	deleteChapter,
 } = globalSlice.actions;
+
 export default globalSlice.reducer;
